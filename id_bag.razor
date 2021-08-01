@@ -1,0 +1,438 @@
+//######
+//Script: ID Bag
+//Author: Phelus
+//Description: ID and sort magical itens.
+//Date: 01/08/2021
+//Version: 1.0
+//######
+
+unsetvar frombag
+unsetvar tobag
+unsetvar toawesomebag
+
+clearignore
+clearsysmsg 
+clearjournal 
+
+//choose witch level of itens do you wish to keep
+removelist "choose_level"
+createlist "choose_level"
+pushlist "choose_level" 3
+//setvar itens_level 3
+
+if not find frombag
+    overhead 'Select From Bag'
+    @setvar frombag
+endif
+if not find tobag
+    overhead 'Select Crap Bag'
+    @setvar tobag
+endif
+if not find toawesomebag
+    overhead 'Select Awesome Bag'
+    @setvar toawesomebag
+endif
+
+//pause 600
+useobject 'frombag'
+pause 600
+useobject 'tobag'
+pause 600
+useobject 'toawesomebag'
+pause 600
+
+if not listexists 'ItemQuality' or list 'ItemQuality' > 0
+    createlist 'ItemQuality'
+    clearlist 'ItemQuality'
+    //miscelaneous quality
+    pushlist 'ItemQuality' 'silver'
+    pushlist 'ItemQuality' 'beastial'
+    pushlist 'ItemQuality' 'construct'
+    pushlist 'ItemQuality' 'daemonic'
+    pushlist 'ItemQuality' 'elemental'
+    pushlist 'ItemQuality' 'humanoid'
+    pushlist 'ItemQuality' 'monstrous'
+    pushlist 'ItemQuality' 'nature'
+    pushlist 'ItemQuality' 'undead'
+    //Slayer level 1 lesser - 15%
+    pushlist 'ItemQuality' 'lesser'
+    //Slayer level 2 regular - 30%
+    pushlist 'ItemQuality' 'regular'
+    //Slayer level 3 greater - 45%
+    pushlist 'ItemQuality' 'greater'
+    if inlist "choose_level" 5
+        //magical level 5
+        //acc level 5 - 15%
+        pushlist 'ItemQuality' 'supremely accurate'
+        //dmg level 5
+        pushlist 'ItemQuality' 'vanquishing'
+        //durability level 5
+        pushlist 'ItemQuality' 'indestructible'
+        //protection level 5
+        pushlist 'ItemQuality' 'invulnerability'
+        //Barding  level 5
+        pushlist 'ItemQuality' 'supremely melodious'
+        //Potency level 5
+        pushlist 'ItemQuality' 'supremely potent'
+    elseif inlist "choose_level" 4
+        //magical level 5
+        //acc level 5 - 15%
+        pushlist 'ItemQuality' 'supremely accurate'
+        //dmg level 5
+        pushlist 'ItemQuality' 'vanquishing'
+        //durability level 5
+        pushlist 'ItemQuality' 'indestructible'
+        //protection level 5
+        pushlist 'ItemQuality' 'invulnerability'
+        //Barding  level 5
+        pushlist 'ItemQuality' 'supremely melodious'
+        //Potency level 5
+        pushlist 'ItemQuality' 'supremely potent'
+        //magical level 4
+        //acc level 4 - 12%
+        pushlist 'ItemQuality' 'exceedingly accurate'
+        //dmg level 4
+        pushlist 'ItemQuality' 'power'
+        //durability level 4
+        pushlist 'ItemQuality' 'fortified'
+        //protection level 4
+        pushlist 'ItemQuality' 'fortification'
+        //Barding  level 4
+        pushlist 'ItemQuality' 'exceedingly melodious'
+        //Potency level 4
+        pushlist 'ItemQuality' 'exceedingly potent'
+    elseif inlist "choose_level" 3
+        //magical level 5
+        //acc level 5 - 15%
+        pushlist 'ItemQuality' 'supremely accurate'
+        //dmg level 5
+        pushlist 'ItemQuality' 'vanquishing'
+        //durability level 5
+        pushlist 'ItemQuality' 'indestructible'
+        //protection level 5
+        pushlist 'ItemQuality' 'invulnerability'
+        //Barding  level 5
+        pushlist 'ItemQuality' 'supremely melodious'
+        //Potency level 5
+        pushlist 'ItemQuality' 'supremely potent'
+        //magical level 4
+        //acc level 4 - 12%
+        pushlist 'ItemQuality' 'exceedingly accurate'
+        //dmg level 4
+        pushlist 'ItemQuality' 'power'
+        //durability level 4
+        pushlist 'ItemQuality' 'fortified'
+        //protection level 4
+        pushlist 'ItemQuality' 'fortification'
+        //Barding  level 4
+        pushlist 'ItemQuality' 'exceedingly melodious'
+        //Potency level 4
+        pushlist 'ItemQuality' 'exceedingly potent'
+        //magical level 3
+        //acc level 3 - 9%
+        pushlist 'ItemQuality' 'eminently accurate'
+        //dmg level 3
+        pushlist 'ItemQuality' 'force'
+        //durability level 3
+        pushlist 'ItemQuality' 'massive'
+        //protection level 3
+        pushlist 'ItemQuality' 'hardening'
+        //Barding  level 3
+        pushlist 'ItemQuality' 'eminently melodious'
+        //Potency level 3
+        pushlist 'ItemQuality' 'eminently potent'
+    elseif inlist "choose_level" 2
+        //magical level 5
+        //acc level 5 - 15%
+        pushlist 'ItemQuality' 'supremely accurate'
+        //dmg level 5
+        pushlist 'ItemQuality' 'vanquishing'
+        //durability level 5
+        pushlist 'ItemQuality' 'indestructible'
+        //protection level 5
+        pushlist 'ItemQuality' 'invulnerability'
+        //Barding  level 5
+        pushlist 'ItemQuality' 'supremely melodious'
+        //Potency level 5
+        pushlist 'ItemQuality' 'supremely potent'
+        //magical level 4
+        //acc level 4 - 12%
+        pushlist 'ItemQuality' 'exceedingly accurate'
+        //dmg level 4
+        pushlist 'ItemQuality' 'power'
+        //durability level 4
+        pushlist 'ItemQuality' 'fortified'
+        //protection level 4
+        pushlist 'ItemQuality' 'fortification'
+        //Barding  level 4
+        pushlist 'ItemQuality' 'exceedingly melodious'
+        //Potency level 4
+        pushlist 'ItemQuality' 'exceedingly potent'
+        //magical level 3
+        //acc level 3 - 9%
+        pushlist 'ItemQuality' 'eminently accurate'
+        //dmg level 3
+        pushlist 'ItemQuality' 'force'
+        //durability level 3
+        pushlist 'ItemQuality' 'massive'
+        //protection level 3
+        pushlist 'ItemQuality' 'hardening'
+        //Barding  level 3
+        pushlist 'ItemQuality' 'eminently melodious'
+        //Potency level 3
+        pushlist 'ItemQuality' 'eminently potent'
+        //magical level 2
+        //acc level 2 - 6%
+        pushlist 'ItemQuality' 'surpassingly accurate'
+        //dmg level 2
+        pushlist 'ItemQuality' 'might'
+        //durability level 2
+        pushlist 'ItemQuality' 'substantial'
+        //durability level 2.5
+        pushlist 'ItemQuality' 'mastercrafted'
+        //protection level 2
+        pushlist 'ItemQuality' 'guarding'
+        //Barding  level 2
+        pushlist 'ItemQuality' 'surpassingly melodious'
+        //Potency level 2
+        pushlist 'ItemQuality' 'surpassingly potent'
+    elseif inlist "choose_level" 1
+        //magical level 5
+        //acc level 5 - 15%
+        pushlist 'ItemQuality' 'supremely accurate'
+        //dmg level 5
+        pushlist 'ItemQuality' 'vanquishing'
+        //durability level 5
+        pushlist 'ItemQuality' 'indestructible'
+        //protection level 5
+        pushlist 'ItemQuality' 'invulnerability'
+        //Barding  level 5
+        pushlist 'ItemQuality' 'supremely melodious'
+        //Potency level 5
+        pushlist 'ItemQuality' 'supremely potent'
+        //magical level 4
+        //acc level 4 - 12%
+        pushlist 'ItemQuality' 'exceedingly accurate'
+        //dmg level 4
+        pushlist 'ItemQuality' 'power'
+        //durability level 4
+        pushlist 'ItemQuality' 'fortified'
+        //protection level 4
+        pushlist 'ItemQuality' 'fortification'
+        //Barding  level 4
+        pushlist 'ItemQuality' 'exceedingly melodious'
+        //Potency level 4
+        pushlist 'ItemQuality' 'exceedingly potent'
+        //magical level 3
+        //acc level 3 - 9%
+        pushlist 'ItemQuality' 'eminently accurate'
+        //dmg level 3
+        pushlist 'ItemQuality' 'force'
+        //durability level 3
+        pushlist 'ItemQuality' 'massive'
+        //protection level 3
+        pushlist 'ItemQuality' 'hardening'
+        //Barding  level 3
+        pushlist 'ItemQuality' 'eminently melodious'
+        //Potency level 3
+        pushlist 'ItemQuality' 'eminently potent'
+        //magical level 2
+        //acc level 2 - 6%
+        pushlist 'ItemQuality' 'surpassingly accurate'
+        //dmg level 2
+        pushlist 'ItemQuality' 'might'
+        //durability level 2
+        pushlist 'ItemQuality' 'substantial'
+        //durability level 2.5
+        pushlist 'ItemQuality' 'mastercrafted'
+        //protection level 2
+        pushlist 'ItemQuality' 'guarding'
+        //Barding  level 2
+        pushlist 'ItemQuality' 'surpassingly melodious'
+        //Potency level 2
+        pushlist 'ItemQuality' 'surpassingly potent'
+        //magical level 1
+        //acc level 1 - 3%
+        pushlist 'ItemQuality' 'accurate'
+        //dmg level 1
+        pushlist 'ItemQuality' 'ruin'
+        //durability level 1
+        pushlist 'ItemQuality' 'durable'
+        //durability level 1.5
+        pushlist 'ItemQuality' 'exceptional'
+        //protection level 1
+        pushlist 'ItemQuality' 'defense'
+        //Barding  level 1
+        pushlist 'ItemQuality' 'melodious'
+        //Potency level 1
+        pushlist 'ItemQuality' 'potent'
+    endif
+endif
+
+if not listexists "ItemTypes" or list "ItemTypes" > 0
+    createlist "ItemTypes"
+    clearlist "ItemTypes"
+    pushlist 'ItemTypes' 9917
+    //Shields  0
+    pushlist 'ItemTypes' 7026
+    pushlist 'ItemTypes' 7027
+    pushlist 'ItemTypes' 7035
+    pushlist 'ItemTypes' 7028
+    pushlist 'ItemTypes' 7029
+    pushlist 'ItemTypes' 7033
+    pushlist 'ItemTypes' 7034
+    pushlist 'ItemTypes' 7031
+    //Platemail  0
+    pushlist 'ItemTypes' 5129
+    pushlist 'ItemTypes' 5143
+    pushlist 'ItemTypes' 5146
+    pushlist 'ItemTypes' 5138
+    pushlist 'ItemTypes' 5139
+    pushlist 'ItemTypes' 5144
+    pushlist 'ItemTypes' 5142
+    pushlist 'ItemTypes' 7177
+    pushlist 'ItemTypes' 5130
+    pushlist 'ItemTypes' 5132
+    pushlist 'ItemTypes' 5135
+    //Chainmail  0
+    pushlist 'ItemTypes' 5056
+    pushlist 'ItemTypes' 5059
+    pushlist 'ItemTypes' 5060
+    pushlist 'ItemTypes' 5063
+    pushlist 'ItemTypes' 5106
+    pushlist 'ItemTypes' 7177
+    //Ringmail  0
+    pushlist 'ItemTypes' 5103
+    pushlist 'ItemTypes' 5106
+    pushlist 'ItemTypes' 5101
+    pushlist 'ItemTypes' 5105
+    pushlist 'ItemTypes' 5131
+    //Studded  0
+    pushlist 'ItemTypes' 5089
+    pushlist 'ItemTypes' 5090
+    pushlist 'ItemTypes' 5085
+    pushlist 'ItemTypes' 5078
+    pushlist 'ItemTypes' 5076
+    //Leather  0
+    pushlist 'ItemTypes' 5070
+    pushlist 'ItemTypes' 5061
+    pushlist 'ItemTypes' 5075
+    pushlist 'ItemTypes' 5074
+    pushlist 'ItemTypes' 5063
+    pushlist 'ItemTypes' 7610
+    //bone  0
+    pushlist 'ItemTypes' 5207
+    pushlist 'ItemTypes' 5203
+    pushlist 'ItemTypes' 7177
+    pushlist 'ItemTypes' 5205
+    pushlist 'ItemTypes' 5204
+    pushlist 'ItemTypes' 5201
+    //Female Armor 0
+    pushlist 'ItemTypes' 7172
+    pushlist 'ItemTypes' 7181
+    pushlist 'ItemTypes' 7170
+    pushlist 'ItemTypes' 7169
+    pushlist 'ItemTypes' 7177
+    pushlist 'ItemTypes' 7174
+    pushlist 'ItemTypes' 7179
+    pushlist 'ItemTypes' 7175
+    //Fencing  0
+    pushlist 'ItemTypes' 3938
+    pushlist 'ItemTypes' 5123
+    pushlist 'ItemTypes' 3719
+    pushlist 'ItemTypes' 5125
+    pushlist 'ItemTypes' 5121
+    pushlist 'ItemTypes' 3922
+    //Macing  0
+    pushlist 'ItemTypes' 5040
+    pushlist 'ItemTypes' 3568
+    pushlist 'ItemTypes' 5177
+    pushlist 'ItemTypes' 5127
+    pushlist 'ItemTypes' 3721
+    pushlist 'ItemTypes' 5181
+    pushlist 'ItemTypes' 5044
+    pushlist 'ItemTypes' 3713
+    pushlist 'ItemTypes' 5112
+    pushlist 'ItemTypes' 3932
+    pushlist 'ItemTypes' 5179
+    //Swords  0
+    pushlist 'ItemTypes' 5049
+    pushlist 'ItemTypes' 3937
+    pushlist 'ItemTypes' 5185
+    pushlist 'ItemTypes' 5046
+    pushlist 'ItemTypes' 3780
+    pushlist 'ItemTypes' 5110
+    pushlist 'ItemTypes' 3934
+    pushlist 'ItemTypes' 5119
+    pushlist 'ItemTypes' 3779
+    //Axes  0
+    pushlist 'ItemTypes' 3907
+    pushlist 'ItemTypes' 3909
+    pushlist 'ItemTypes' 3917
+    pushlist 'ItemTypes' 3915
+    pushlist 'ItemTypes' 5182
+    pushlist 'ItemTypes' 5115
+    pushlist 'ItemTypes' 5187
+    pushlist 'ItemTypes' 3911
+    pushlist 'ItemTypes' 3913
+    pushlist 'ItemTypes' 3717
+    pushlist 'ItemTypes' 3718
+    //Bows  0
+    pushlist 'ItemTypes' 5117
+    pushlist 'ItemTypes' 3920
+    pushlist 'ItemTypes' 5042
+    pushlist 'ItemTypes' 3834
+    //wands  0
+    pushlist 'ItemTypes' 3570
+    pushlist 'ItemTypes' 3573
+    pushlist 'ItemTypes' 3572
+    pushlist 'ItemTypes' 3571
+    //instruments  0
+    pushlist 'ItemTypes' 3763
+    pushlist 'ItemTypes' 3742
+    pushlist 'ItemTypes' 3762
+    pushlist 'ItemTypes' 3740
+    pushlist 'ItemTypes' 10245
+    //book  0
+    pushlist 'ItemTypes' 3834
+endif
+
+//pause 5000
+
+foreach item in ItemTypes
+    while findtype item frombag as currentlyid
+        if insysmsg "The world will save"
+            overhead "aguardando salvar mundo"
+            while not insysmsg "World save"
+                pause 1000
+            endwhile
+            overhead "mundo salvo"
+        endif
+        useskill 'ItemId'
+        waitfortarget 5000
+        target currentlyid
+        pause 600
+        getlabel currentlyid found_label
+        foreach quality in ItemQuality
+            if quality in found_label
+                lift currentlyid
+                wait 1000
+                drop toawesomebag
+                overhead quality 22
+                pause 600
+            endif
+        endfor
+        if not find currentlyid toawesomebag
+            lift currentlyid
+            wait 1000
+            drop tobag
+            pause 600
+            unsetvar currentlyid
+            unsetvar item
+            @ignore currentlyid
+            @ignore item
+        endif
+    endwhile
+endfor
+
+overhead "acabou!"

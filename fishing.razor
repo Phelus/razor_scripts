@@ -1,0 +1,83 @@
+
+//Script: Fishing em alto mar com aviso de captcha
+//Author: Rag
+//Description: Pesca, guardar os itens na hatch do barco, 
+//e avisa no guild quando aparecer captcha
+//Date: 02/08/2021
+//Version: 1.0
+
+//Passo a passo:
+//1: Criar counters de Lobster, Crab, Large Fish e Special Fishing Net
+//2: Substituir 0x4EA2A863 pelo container alvo. Deve estar dentro do Hatch
+//3: Char deve estar no alcance da hatch
+//4: Equipar uma vara de pesca
+//5: Dar play
+
+
+clearsysmsg 
+
+//Vara de pesca
+dclick 'left'
+wait 11000
+
+if insysmsg 'world is saving'
+    wait 10000
+endif
+
+//Pega lobster
+if count 'Lobster' > 0
+    overhead 'tem lobster aqui carai'
+
+    lifttype 17619
+    wait 1000
+    drop '0x4EA2A863'
+    
+//Pega Large Fish
+elseif count 'Large' > 0
+    overhead 'tem large fish aqui carai'
+
+    lifttype 2508
+    wait 1000
+    drop '0x4EA2A863'
+    
+//Pega Crab
+elseif count 'Crab' > 0
+    overhead 'tem crab aqui carai'
+
+    lifttype 17617
+    wait 1000
+    drop '0x4EA2A863'
+
+//Pega Special fish net
+elseif count 'Special' > 0
+    overhead 'tem special net aqui carai'
+
+    lifttype 3530
+    wait 1000
+    drop '0x4EA2A863'
+
+
+//Faz outro check de save
+elseif insysmsg  'world is saving'
+    wait 10000
+else
+
+//Espera pra ler o sysmsg
+wait 1000
+
+
+//se não pegou nada especial, ve se é fish normal
+if not insysmsg 'catch'
+    
+//Se nao for special ou normal, foreu
+    for 5
+    guild 'PRERIGO, CAPTCHA NO PESCADOR!'
+    wait 10000
+    endfor
+    
+endif
+
+endif
+
+
+loop

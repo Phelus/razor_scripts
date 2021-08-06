@@ -3,7 +3,7 @@
 //Author: Phelus
 //Description: ID and sort magical itens.
 //Date: 01/08/2021
-//Version: 1.0
+//Version: 1.1
 //######
 
 unsetvar frombag
@@ -20,15 +20,25 @@ createlist "choose_level"
 pushlist "choose_level" 3
 //setvar itens_level 3
 
-if not find frombag
-    overhead 'Select From Bag'
-    @setvar frombag
+@setvar main_magical_container 0x414FE118
+@setvar frombag 0x4A78C1C5
+@setvar tobag 0x502AC96C
+@setvar toawesomebag 0x4C4A475A
+
+if not find main_magical_container 
+    overhead 'Select Main container'
+    @setvar main_magical_container 
 endif
-if not find tobag
+
+if not find frombag main_magical_container
+    overhead 'Select From Bag'
+    @setvar frombag 
+endif
+if not find tobag main_magical_container
     overhead 'Select Crap Bag'
     @setvar tobag
 endif
-if not find toawesomebag
+if not find toawesomebag main_magical_container
     overhead 'Select Awesome Bag'
     @setvar toawesomebag
 endif
@@ -41,7 +51,8 @@ pause 600
 useobject 'toawesomebag'
 pause 600
 
-if not listexists 'ItemQuality' or list 'ItemQuality' > 0
+//if not listexists 'ItemQuality'
+    // or list 'ItemQuality' > 0
     createlist 'ItemQuality'
     clearlist 'ItemQuality'
     //miscelaneous quality
@@ -267,9 +278,10 @@ if not listexists 'ItemQuality' or list 'ItemQuality' > 0
         //Potency level 1
         pushlist 'ItemQuality' 'potent'
     endif
-endif
+    //endif
 
-if not listexists "ItemTypes" or list "ItemTypes" > 0
+    if not listexists "ItemTypes"
+        // or list "ItemTypes" > 0
     createlist "ItemTypes"
     clearlist "ItemTypes"
     pushlist 'ItemTypes' 9917
@@ -436,3 +448,6 @@ foreach item in ItemTypes
 endfor
 
 overhead "acabou!"
+say "Trabalho feito! Verique as bags."
+
+script "master script"

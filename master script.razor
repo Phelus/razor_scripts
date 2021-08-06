@@ -1,0 +1,113 @@
+//script 'auto vet premium'
+
+@setvar "bag_id" 0x414FE118
+@setvar "bag_keg" 0x455D5D68
+
+//clearsysmsg 
+//clearjournal 
+
+if not find bag_id "ground"
+    @setvar "bag_id"
+endif
+if not find bag_keg "ground"
+    @setvar "bag_keg"
+endif
+
+if not listexists "regs"
+    createlist "regs"
+    //GS 3973
+    pushlist "regs" 3973
+    //GA 3972
+    pushlist "regs" 3972
+    //MR 3974
+    pushlist "regs" 3974
+    //BM 3963
+    pushlist "regs" 3963
+    //SS 3981
+    pushlist "regs" 3981
+    //NS 3976
+    pushlist "regs" 3976
+    //SA 3980
+    pushlist "regs" 3980
+    //BP 3962
+    pushlist "regs" 3962
+endif
+
+if not timerexists "welcome"
+    createtimer "welcome"
+    settimer "welcome" 0
+endif
+if not timerexists "running"
+    createtimer "running"
+    settimer "running" 0
+endif
+if not timerexists "ignore"
+    createtimer "ignore"
+    settimer "ignore" 0
+endif
+
+if timer 'running' >= 30000
+    sysmsg 'Running Auto Home Care (AHC)'    
+    settimer "running" 0
+endif
+    
+if insysmsg "The world will save" or insysmsg "world is saving"
+    overhead "aguardando salvar mundo"
+    while not insysmsg "World save"
+        pause 1000
+    endwhile
+    overhead "mundo salvo"
+    clearsysmsg 
+endif
+
+if findtype 3821 "bag_id" as pagamento
+    lift "pagamento" 60000
+    wait 1000
+    drop backpack
+    say "Obrigado meu senhor, vou iniciar os trabalhos!"
+    script "id_bag"
+endif
+
+if findtype 3973 "regs_container" 0 600 or findtype 3972 "regs_container" 0 600 or findtype 3974 "regs_container" 0 600 or findtype 3963 "regs_container" 0 600 or findtype 3981 "regs_container" 0 1924 or findtype 3976 "regs_container" 0 1709 or findtype 3980 "regs_container" 0 900 or findtype 3962 "regs_container" 0 900
+    if findtype 6464 backpack 0 1 or findtype 6464 "regs_container" 0 1 or findtype 6464 "main_container" 0 1
+        if findtype 3739 backpack 0 1
+            //mortar
+            if findtype 3854 backpack 0 1
+                //pot
+                say "Verifiquei que temos estoque disponivel para fazer kegs, vou iniciar."
+                script "kegs"
+            endif
+        endif
+    endif
+endif
+
+if findtype 3821 "bag_keg" as pagamento
+    lift "pagamento" 60000
+    wait 1000
+    drop backpack
+    say "Obrigado meu senhor, vou iniciar os trabalhos!"
+    script "kegs"
+endif
+
+if timer "welcome" >= 15000 and findtype 400 ground as person
+    // or findtype 401 "ground" as person and 
+    getlabel person mylabel
+    pause 1500
+    say "Ola"
+    pause 1000
+    say mylabel
+    pause 1000
+    say "Se precisar posso identificar seus itens magicos ou fazer pocoes!"
+    unsetvar person
+    ignore person
+    settimer "welcome" 0
+endif
+
+if timer "ignore" >= 60000
+    @clearignore
+    settimer "ignore" 0
+endif
+
+pause 1000
+
+loop

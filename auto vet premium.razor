@@ -1,0 +1,142 @@
+if not listexists 'buff_taste_id'
+    createlist 'buff_taste_id'
+    pushlist 'buff_taste_id' 'yes'
+endif
+if not timerexists 'vet'
+    createtimer 'vet'
+    settimer 'vet' 8501
+endif
+if not timerexists 'running'
+    createtimer 'running'
+    settimer 'running' 30001
+endif
+if not timerexists 'bands'
+    createtimer 'bands'
+    settimer 'bands' 11001
+endif
+if not timerexists 'cast_recovery'
+    createtimer 'cast_recovery'
+    settimer 'cast_recovery' 2001
+endif
+if not timerexists 'heal_pot'
+    createtimer 'heal_pot'
+    settimer 'heal_pot' 30001
+endif
+if not timerexists 'cure_pot'
+    createtimer 'cure_pot'
+    settimer 'cure_pot' 10001
+endif
+if not timerexists 'tba'
+    createtimer 'tba'
+    settimer 'tba' 600
+endif
+if not timerexists 'use_skill'
+    createtimer 'use_skill'
+    settimer 'use_skill' 600
+endif
+if hits < 75
+    if skill 'Healing' > 30 and timer 'bands' >= 11000 and findtype 3617 backpack and timer 'tba' >= 600
+        usetype 3617
+        waitfortarget 5000
+        target 'self'
+        settimer 'bands' 0
+        settimer 'tba' 0
+    elseif skill 'Magery' > 30 and timer 'cast_recovery' >= 2000 and mana >= 14 and count 'garlic' > 0 and count 'ginseng' > 0 and count 'mandrake root' > 0 and count 'spiders silk' > 0 and timer 'tba' >= 600
+        target cancel
+        cast 'greater heal'
+        waitfortarget 5000
+        target 'self'
+        settimer 'cast_recovery' 0
+        settimer 'tba' 0
+    elseif count 'heal potions' and timer 'heal_pot' >= 11000 and timer 'tba' >= 600
+        potion 'heal'
+        settimer 'heal_pot' 0
+        settimer 'tba' 0
+    endif
+endif
+
+if poisoned and count 'cure potions' and timer 'cure_pot' >= 11000 and timer 'tba' >= 600
+    potion 'cure'
+    settimer 'cure_pot' 0
+    settimer 'tba' 0
+endif
+
+if not findbuff 'herbal poutice' and inlist 'buff_taste_id' 'yes' and hits >= 90 and not hidden and not findbuff 'actively meditating' and timer 'tba' >= 600
+    skill "teste id"
+    settimer "tba" 0 
+    settimer "use_skill" 0 
+endif
+
+//if not setvar 'pet_tank' true
+//    setvar 'pet_tank'
+//endif
+
+//dclick 0x474E1937
+//waitfortarget
+//target 0x92A2F
+//
+//dclicktype 'clean bandage%s%'
+//waitfortarget 1000
+//target 
+//settimer 'vet' 0
+//
+//dclicktype 3617
+//usetype 3617
+
+//if timer 'vet' >= 8500 and findtype 'clean bandage%s%' backpack and timer 'tba' >= 600
+//  @dclicktype 3617 backpack
+//  pause 500
+//  target pet_tank
+//  pause 500
+//  if insysmsg 'not damaged'
+//      @dclicktype 3617 backpack
+//      pause 500
+//      target pet_dmg
+//      pause 500
+//        if insysmsg 'not damaged'
+ //           settimer 'vet' 4000
+ //            settimer 'tba' 0
+ //          else
+ //            settimer 'vet' 0
+ //            settimer 'tba' 0
+ //          endif    
+ //  else
+ //    settimer 'vet' 0
+ //   settimer 'tba' 0
+ // endif
+ //endif
+
+//if hits 'pet_tank' < maxhits 'pet_tank' 
+//    if timer 'vet' >= 8500
+//        sysmsg 'Curando Pet Tank'
+//        usetype 3617
+//        waitfortarget 1000
+//        target 'pet_tank'
+//        settimer 'vet' 0
+//    endif
+//endif
+//if hits 'pet_dmg' < maxhits 'pet_dmg' and timer 'vet' >= 8500 and hits 'pet_dmg' = maxhits 'pet_dmg'
+//    sysmsg 'Curando Pet Dmg'
+//    usetype 3617
+//    waitfortarget 1000
+//    target 'pet_dmg'
+//    settimer 'vet' 0
+    //endif
+    //endif
+if timer 'running' >= 30000
+    sysmsg 'Running Auto Vet Premium (AVP)'
+    if count 'bandages' < 30
+        sysmsg 'Poucas bands < 30'
+    endif
+    if weight >= 350
+        sysmsg 'Peso > 350'
+    endif
+    settimer 'running' 0
+endif
+while dead 'self'
+
+endwhile
+
+pause 100
+loop
+//wait 500

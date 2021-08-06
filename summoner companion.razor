@@ -1,0 +1,174 @@
+###
+# Script: Summoner Companion
+# Author: Phelus
+# Description: The main purpose is to help your summoner.
+# Date: 20/07/2021
+# Changes:
+###
+// ### TIMERS ###
+if not timerexists "cast_recovery"
+    createtimer "cast_recovery"
+    settimer "cast_recovery" 1000
+endif
+if not timerexists "pot_heal"
+    createtimer "pot_heal"
+    settimer "pot_heal" 11000
+endif
+if not timerexists "pot_cure"
+    createtimer "pot_cure"
+    settimer "pot_cure" 11000
+endif
+if not timerexists "pot_refresh"
+    createtimer "pot_refresh"
+    settimer "pot_refresh" 11000
+endif
+if not timerexists "running"
+    createtimer "running"
+    settimer "running" 30000
+endif
+if not timerexists "explo_pouch"
+    createtimer "explo_pouch"
+    settimer "explo_pouch" 30000
+endif
+if not timerexists "checks"
+    createtimer "checks"
+    settimer "checks" 30000
+endif
+if not timerexists "tba"
+    createtimer "tba"
+    settimer "tba" 600
+endif
+if not timerexists "use_skill"
+    createtimer "use_skill"
+    settimer "use_skill" 11000
+endif
+// ### LISTS ###
+if not listexists 'first_run'
+  createlist 'first_run'
+  //clearlist 'first_run'
+  //pushlist 'first_run' 'yes'
+endif
+if not listexists 'counter'
+  createlist 'counter'
+  clearlist 'counter'
+  //pushlist 'first_run' 'yes'
+endif
+if list 'first_run' = 0
+    pushlist 'first_run' 'yes'
+    clearsysmsg 
+endif
+// ### Running information ###
+if timer 'running' > 30000
+    sysmsg 'Running Summoner Companion Premium (SCP)' 60
+    settimer 'running' 0
+endif
+// ### MAIN ###
+if not dead
+    if skill "Magery" >= 50
+    if hp < maxhp and timer "tba" >= 600 and timer "cast_recovery" >= 1000 and mana >= 14 and findtype "Mandrake Root%s%" backpack and findtype "Garlic" backpack and findtype "Ginseng" backpack and findtype "Spider's Silk" backpack and not hidden
+            cast "greater heal"
+            waitfortarget 5000
+            hotkey "Target Self"
+            settimer "cast_recovery" 0
+            settimer "tba" 0
+            endif
+        if poisoned and timer "tba" >= 600 and timer "cast_recovery" >= 1000 and hp >= 70 and mana >= 14 and findtype "Mandrake Root%s%" backpack and findtype "Garlic" backpack and findtype "Ginseng" backpack and not hidden
+            cast 'arch cure'
+            waitfortarget 5000
+            hotkey "Target Self"
+            settimer "cast_recovery" 0
+            settimer "tba" 0
+        endif
+        if hits < 60 and timer "tba" >= 600 and mana <= 14 and timer "pot_heal" >= 10700 and findtype "Yellow Potion" backpack and not hidden
+            //pause 300
+            potion "heal"
+            settimer "pot_heal" 0
+            settimer "tba" 0
+        endif
+        if poisoned and timer "tba" >= 600 and mana <= 14 and timer "pot_cure" >= 4700 and findtype "Orange Potion" backpack and not hidden
+            potion "cure"
+            settimer "pot_cure" 0
+            settimer "tba" 0
+        endif
+        if stam <= 15 and timer "tba" >= 600 and timer "pot_refresh" >= 4700 and findtype "Red Potion" backpack and not hidden
+            potion "refresh"
+            settimer "pot_refresh" 0
+            settimer "tba" 0
+        endif
+    elseif skill 'healing' >= 50
+        if hp < maxhp and timer "bands" >= 10700
+            pause 300
+            dclicktype "clean bandage%s%" backpack
+            waitfortarget 5000
+            hotkey "Target Self" 
+            //wait 200 
+            settimer "bands" 0 
+        endif 
+        if poisoned and timer "bands" >= 10700 
+            pause 300 
+            dclicktype "clean bandage%s%" backpack 
+            waitfortarget 5000 
+            hotkey "Target Self" 
+            //wait 200 
+            settimer "bands" 0 
+        endif 
+        if hits < 60 and timer "bands" <= 10000 and timer "pot_heal" >= 10700 and findtype "Yellow Potion" backpack  
+            pause 300 
+            potion "heal" 
+            settimer "pot_heal" 0 
+        endif 
+        if poisoned and timer "bands" <= 10000 and timer "pot_cure" >= 4700 and findtype "Orange Potion" backpack 
+            pause 300 
+            potion "cure" 
+            settimer "pot_cure" 0 
+        endif
+        if stam <= 15 and timer "pot_refresh" >= 4700 and findtype "Red Potion" backpack 
+            pause 300 
+            potion "refresh" 
+            settimer "pot_refresh" 0 
+        endif 
+    endif
+    if str < 110 
+        if skill 'magery' >= 50 
+        if hp > 90 and timer "tba" >= 2000 and timer "cast_recovery" >= 1000 and mana >= 80 and not hidden and str <= 100
+                cast 'bless'
+                waitfortarget 5000 
+                hotkey "Target Self" 
+                settimer "cast_recovery" 0 
+                settimer "tba" 0 
+            endif 
+        endif
+    endif
+    if mana <= 50  and hp >= 90 and timer "tba" >= 1000 and timer "cast_recovery" >= 1000 and timer "use_skill" >= 3000 and not hidden
+        skill 'meditation' 
+        settimer "tba" 0 
+        settimer "use_skill" 0 
+    endif 
+    
+    //if buffexists
+    //endif
+endif
+// ### WS Check ### 
+if insysmsg "The world is saving, please wait." 
+    clearjournal  
+    while not insysmsg "save complete" 
+        //push 
+        pause 100 
+        pushlist "counter" "1" 
+        if list "counter" >= 60 
+            clearlist "counter" 
+            break 
+        endif 
+    endwhile 
+endif 
+// ### Counting resources ### 
+if timer 'checks' >= 30000 
+    sysmsg 'SCP: Checking resources' 60 
+    if count "Bandages" < 30 
+        overhead 'Poucas Bands < 30' 27 
+    endif 
+    settimer 'checks' 0 
+endif
+// ### The End ###
+pause 100
+loop

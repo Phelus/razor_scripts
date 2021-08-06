@@ -1,0 +1,391 @@
+
+@setvar "main_container" 0x455D5D68
+@setvar "regs_container" 0x44DE51A0
+@setvar "heal_container" 0x4EF5619B
+@setvar "cure_container" 0x4EF56197
+@setvar "refresh_container" 0x4EF5619D
+@setvar "resist_container" 0x4EF56195
+@setvar "poison_container" 0x4EF5619C
+@setvar "str_container" 0x4EF56194
+@setvar "dex_container" 0x4EF56198
+@setvar "explo_container" 0x446E7DD6
+
+//clearjournal 
+clearsysmsg 
+gumpclose 
+
+pause 300
+dclick "main_container"
+pause 600
+dclick "regs_container"
+pause 600
+
+if not listexists "craft_heal" 
+    createlist "craft_heal"
+    pushlist "craft_heal" "yes"
+elseif list "craft_heal" >= 0
+    removelist "craft_heal"
+    createlist "craft_heal"
+    pushlist "craft_heal" "yes"
+endif
+if not listexists "craft_cure" 
+    createlist "craft_cure"
+    pushlist "craft_cure" "yes"
+elseif list "craft_cure" >= 0
+    removelist "craft_cure"
+    createlist "craft_cure"
+    pushlist "craft_cure" "yes"
+endif
+if not listexists "craft_refresh"
+    createlist "craft_refresh"
+    pushlist "craft_refresh" "no"
+elseif list "craft_refresh" >= 0
+    removelist "craft_refresh"
+    createlist "craft_refresh"
+    pushlist "craft_refresh" "no"
+endif
+if not listexists "craft_str"
+    createlist "craft_str"
+    pushlist "craft_str" "yes"
+elseif list "craft_str" >= 0
+    removelist "craft_str"
+    createlist "craft_str"
+    pushlist "craft_str" "yes"
+endif
+if not listexists "craft_dex"
+    createlist "craft_dex"
+    pushlist "craft_dex" "yes"
+elseif list "craft_dex" >= 0
+    removelist "craft_dex"
+    createlist "craft_dex"
+    pushlist "craft_dex" "yes"
+endif
+if not listexists "craft_resist"
+    createlist "craft_resist"
+    pushlist "craft_resist" "yes"
+elseif list "craft_resist" >= 0
+    removelist "craft_resist"
+    createlist "craft_resist"
+    pushlist "craft_resist" "yes"
+endif
+if not listexists "craft_explo"
+    createlist "craft_explo"
+    pushlist "craft_explo" "yes"
+elseif list "craft_explo" >= 0
+    removelist "craft_explo"
+    createlist "craft_explo"
+    pushlist "craft_explo" "yes"
+endif
+if not listexists "craft_poison"
+    createlist "craft_poison"
+    pushlist "craft_poison" "yes"
+elseif list "craft_poison" >= 0
+    removelist "craft_poison"
+    createlist "craft_poison"
+    pushlist "craft_poison" "yes"
+endif
+
+if not listexists "regs"
+    createlist "regs"
+    //GS 600
+    pushlist "regs" 3973
+    //GA 600
+    pushlist "regs" 3972
+    //MR 600
+    pushlist "regs" 3974
+    //BM 600
+    pushlist "regs" 3963
+    //SS
+    pushlist "regs" 3981
+    //NS
+    pushlist "regs" 3976
+    //SA 3980
+    pushlist "regs" 3980
+    //BP
+    pushlist "regs" 3962
+endif
+
+pause 1000
+
+while findtype 6464 backpack 253 1 as keg_heal
+    //move heal keg to container
+    getlabel keg_heal keg_label
+    if "completely full" in keg_label
+    lift keg_heal
+    wait 1000
+    drop "heal_container"
+    wait 1000
+    else
+        ignore keg_heal
+    endif
+endwhile
+while findtype 6464 backpack 44 1 as keg_cure
+    //move cure keg to container
+    getlabel keg_cure keg_label
+    if "completely full" in keg_label
+    lift keg_cure
+    wait 1000
+    drop "cure_container"
+    wait 1000
+    else
+        ignore keg_cure
+    endif
+endwhile
+while findtype 6464 backpack 37 1 as keg_refresh
+    //move cure keg to container
+    getlabel keg_refresh keg_label
+    if "completely full" in keg_label
+    lift keg_refresh
+    wait 1000
+    drop "refresh_container"
+    wait 1000
+    else
+        ignore keg_refresh
+    endif
+endwhile
+while findtype 6464 backpack 1109 1 as keg_resist
+    //move cure keg to container
+    getlabel keg_resist keg_label
+    if "completely full" in keg_label
+    lift keg_resist
+    wait 1000
+    drop "resist_container"
+    wait 1000
+    else
+        ignore keg_resist
+    endif
+endwhile
+while findtype 6464 backpack 363 1 as keg_poison
+    //move cure keg to container
+    getlabel keg_poison keg_label
+    if "completely full" in keg_label
+    lift keg_poison
+    wait 1000
+    drop "poison_container"
+    wait 1000
+    else
+        ignore keg_poison
+    endif
+endwhile
+while findtype 6464 backpack 956 1 as keg_str
+    //move cure keg to container
+    getlabel keg_str keg_label
+    if "completely full" in keg_label
+    lift keg_str
+    wait 1000
+    drop "str_container"
+    wait 1000
+    else
+        ignore keg_str
+    endif
+endwhile
+while findtype 6464 backpack 93 1 as keg_dex
+    //move cure keg to container
+    getlabel keg_dex keg_label
+    if "completely full" in keg_label
+    lift keg_dex
+    wait 1000
+    drop "dex_container"
+    wait 1000
+    else
+        ignore keg_dex
+    endif
+endwhile
+while findtype 6464 backpack 419 1 as keg_explo
+    //move cure keg to container
+    getlabel keg_explo keg_label
+    if "completely full" in keg_label
+    lift keg_explo
+    wait 1000
+    drop "explo_container"
+    wait 1000
+    else
+        ignore keg_explo
+    endif
+endwhile
+
+//foreach reg in "regs"
+
+foreach reg in "regs"
+if findtype reg backpack
+    lift reg 60000
+    wait 1000
+    drop "regs_container"
+    wait 1000
+endif
+endfor
+
+
+
+if not findtype 3973 backpack and not findtype 3972 backpack and not findtype 3974 backpack and not findtype 3963 backpack and not findtype 3981 backpack and not findtype 3976 backpack and not findtype 3980 backpack and not findtype 3962 backpack
+
+if inlist "craft_heal" "yes" and findtype 3973 "regs_container" 0 600 as reg_stock
+    //restock gs
+    lift reg_stock 600
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_cure" "yes" and findtype 3972 "regs_container" 0 600 as reg_stock
+    //restock ga
+    lift reg_stock 600
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_str" "yes" and findtype 3974 "regs_container" 0 600 as reg_stock
+    //restock mr
+    lift reg_stock 600
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_dex" "yes" and findtype 3963 "regs_container" 0 600 as reg_stock
+    //restock bm
+    lift reg_stock 600
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_resist" "yes" and findtype 3981 "regs_container" 0 2250 as reg_stock
+    //restock ss
+    lift reg_stock 2250
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_poison" "yes" and findtype 3976 "regs_container" 0 2000 as reg_stock
+    //restock ns
+    lift reg_stock 2000
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_explo" "yes" and findtype 3980 "regs_container" 0 900 as reg_stock
+    //restock sa
+    lift reg_stock 900
+    wait 1000
+    drop backpack
+    wait 1000
+elseif inlist "craft_refresh" "yes" and findtype 3962 "regs_container" 0 900 as reg_stock
+    //restock bp
+    lift reg_stock 900
+    wait 1000
+    drop backpack
+    wait 1000
+else
+    overhead "cabo regs"
+    say "Acabou os regs rapá"
+    script "master script"
+endif
+endif
+    
+if not findtype 6464 backpack 0 1 and findtype 6464 "regs_container" 0 1 as empty_keg
+    //restock empty keg to bag
+    //restock 2
+    //waitfortarget 5000
+    //target "regs_container"
+    //pause 1000
+    lift empty_keg
+    wait 1000
+    drop backpack
+    wait 1000
+elseif not findtype 6464 backpack 0 1 and findtype 6464 "main_container" 0 1 as empty_keg
+    lift empty_keg
+    wait 1000
+    drop backpack
+    wait 1000
+elseif not findtype 6464 backpack 0 1 and not findtype 6464 "regs_container" 0 1 and not findtype 6464 "main_container" 0 1
+    overhead "acabou keg vazio"
+    say "Acabou o keg vazio vacilao"
+    script "master script"
+endif
+    
+if not findtype 3854 backpack 0 1 and findtype 3854 "regs_container" 0 1 as empty_bottle
+    //restock empty bottle to bag
+    //restock 3
+    //waitfortarget 5000
+    //target "regs_container"
+    //pause 1000
+    lift empty_bottle 5
+    wait 1000
+    drop backpack
+    wait 1000
+elseif not findtype 3854 backpack 0 1 and findtype 3854 "main_container" 0 1 as empty_bottle
+    lift empty_bottle 5
+    wait 1000
+    drop backpack
+    wait 1000
+elseif not findtype 3854 backpack 0 1 and not findtype 3854 "regs_container" 0 1 and not findtype 3854 "main_container" 0 1
+    overhead "acabou pot vazio"
+    say "Acabou pot vazio meu consagrado"
+    script "master script"
+endif
+    
+if not findtype 3739 backpack 0 1 and findtype 7864 backpack 0 1 and findtype 7154 backpack 0 5
+    //craft mortar and pestle
+    //dclick 0x428267B8
+    dclicktype 7864
+    waitforgump 949095101
+    gumpresponse 100
+    waitforgump 949095101
+    gumpresponse 204
+    waitforgump 949095101
+    waitforgump 949095101
+    for 10
+        gumpresponse 204
+        waitforgump 949095101
+        waitforgump 949095101
+    endfor
+    gumpclose 
+elseif not findtype 7154 backpack 0 5
+    overhead "nao encontrei iron"
+    say "Acabou iron fi di rapariga"
+    script "master script"
+endif
+
+if count "toolkit" < 2 and findtype 7154 backpack 0 5 and findtype 7864 backpack 0 1
+    //craft tool kit
+    //dclick 0x428267B8
+    dclicktype 7864
+    waitforgump 949095101
+    gumpresponse 100
+    waitforgump 949095101
+    gumpresponse 205
+    waitforgump 949095101
+    waitforgump 949095101
+    gumpclose 
+elseif not findtype 7864 backpack 0 1
+    overhead "acabou tool kit"
+    say "Acabou tool kit e nao consigo craftar"
+    script "master script"
+elseif not findtype 7154 backpack 0 5
+    overhead "nao encontrei iron"
+    say "Acabou iron"
+    script "master script"
+endif
+
+foreach reg in "regs"
+if findtype reg backpack and findtype 6464 backpack 0 1 and findtype 3739 backpack 0 1 and findtype 3854 backpack 0 1
+    //start queue
+    //dclicktype 3739
+    //waitforgump 949095101
+    //gumpresponse 6
+    //waitforgump 453554062
+    //waitforgump 949095101
+    //gumpclose 
+    //gumpresponse 7
+    say '[craftingqueue'
+    waitforgump 453554062
+    gumpresponse 7
+    waitforgump 453554062        
+    pause 2000
+    while not insysmsg "Crafting queue begun"
+        gumpresponse 7
+        waitforgump 453554062        
+        pause 2000
+    endwhile
+    while not insysmsg "Crafting queue complete"
+        pause 1000
+    endwhile
+    clearsysmsg 
+endif
+endfor
+   
+//endfor
+pause 1000
+loop

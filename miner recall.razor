@@ -1,0 +1,714 @@
+// Author: Phelus
+// Description: Auto Recall Miner
+// pending check hiding skill and setup question
+// pending check tinker skill and setup question
+// pending add hiding timer
+//[System] The server is going down shortly. You have approximately 10 minutes to find a safe location.
+//[System] The server is going down shortly. You have approximately 2 minutes to find a safe location.
+//The world is saving please wait.
+//The server is going down shortly.
+//The server has saved for the last time and server wars has started...
+//###
+//### TIMERS
+//###
+if not timerexists 'running'
+  createtimer 'running'
+  settimer 'running' 30001
+endif
+if not timerexists 'save'
+  createtimer 'save'
+  settimer 'save' 10001
+endif
+if not timerexists 'hiding'
+  createtimer 'hiding'
+  settimer 'hiding' 10001
+endif
+if not timerexists 'sound'
+  createtimer 'sound'
+  settimer 'sound' 30001
+endif
+//###
+//### LISTS
+//###
+if not listexists 'smelt_on_the_run'
+  createlist 'smelt_on_the_run'
+  pushlist 'smelt_on_the_run' 'no'
+endif
+if not listexists 'craft_tools'
+  createlist 'craft_tools'
+  pushlist 'craft_tools' 'no'
+endif
+if not listexists 'sound'
+  createlist 'sound'
+  pushlist 'sound' 'no'
+endif
+if not listexists 'hide'
+  createlist 'hide'
+  pushlist 'hide' 'no'
+endif
+if not listexists 'mark_local'
+  createlist 'mark_local'
+  pushlist 'mark_local' 'no'
+endif
+if not listexists 'HomeRune'
+  createlist 'HomeRune'
+  pushlist 'HomeRune' 5
+endif
+if not listexists 'beetle'
+  createlist 'beetle'
+  //pushlist 'beetle' 'no'
+endif
+if not listexists 'pack_horse'
+  createlist 'pack_horse'
+  //pushlist 'beetle' 'yes'
+endif
+if not listexists 'MineBook'
+  createlist 'MineBook'
+endif
+if not listexists 'Runes'
+  createlist 'Runes'
+endif
+if list 'Runes' == 0
+  pushlist 'Runes' 5 //1
+  pushlist 'Runes' 11 //2
+  pushlist 'Runes' 17 //3
+  pushlist 'Runes' 23 //4
+  pushlist 'Runes' 29 //5
+  pushlist 'Runes' 35 //6
+  pushlist 'Runes' 41 //7
+  pushlist 'Runes' 47 //8
+  pushlist 'Runes' 53 //9 -
+  pushlist 'Runes' 59 //10
+  pushlist 'Runes' 65 //11
+  pushlist 'Runes' 71 //12
+  pushlist 'Runes' 77 //13
+  pushlist 'Runes' 83 //14
+  pushlist 'Runes' 89 //15
+  pushlist 'Runes' 95 //16
+  // All runes have been mined, go to the next runebook
+  poplist 'MineBook' 'front'
+endif
+if list 'MineBook' == 0
+  //pushlist 'Runebooks' 0x434445c3 //EDIT THIS USING OBJECT INSPECTOR AND SELECT A RUNEBOOK
+  //pushlist 'Runebooks' 0x454b1c14 //EDIT THIS USING OBJECT INSPECTOR AND SELECT A RUNEBOOK
+  if find 'MineBook1'
+    pushlist 'MineBook' 'MineBook1'
+  endif
+  if find 'MineBook2'
+    pushlist 'MineBook' 'MineBook2'
+  endif
+endif
+if not listexists 'Ores'
+  createlist 'Ores'
+  pushlist 'Ores' 6583
+  pushlist 'Ores' 6584
+  pushlist 'Ores' 6586
+  pushlist 'Ores' 6585
+endif
+if not listexists 'Stones'
+  createlist 'Stones'
+// Citrine
+  pushlist 'Stones' 3861 
+  // Amber
+  pushlist 'Stones' 3877 
+  // dark saphire
+  pushlist 'Stones' 12690 
+  // turquoise
+  pushlist 'Stones' 12691 
+  // perfect Emerald
+  pushlist 'Stones' 12692 
+  // ecru citrine
+  pushlist 'Stones' 12693 
+  // fire rubi
+  pushlist 'Stones' 12695 
+  // blue diamond
+  pushlist 'Stones' 12696 
+  // Star Sapphire
+  pushlist 'Stones' 3873 
+  // Amethyst
+  pushlist 'Stones' 3862 
+  // Ruby
+  pushlist 'Stones' 3859 
+  // Diamond
+  pushlist 'Stones' 3878 
+  // Sapphire
+  pushlist 'Stones' 3865 
+  // Tourmaline
+  pushlist 'Stones' 3885 
+  // stone
+  pushlist 'Stones' 6009 
+endif
+//###
+//### OBJECTS
+//###
+if not find 'resource_miner'
+    target cancel
+    setvar 'resource_miner'
+endif
+if not find 'MineBook1'
+  setvar 'MineBook1'
+  if not inlist 'MineBook' 'MineBook1'
+    pushlist 'MineBook' 'MineBook1'
+  endif
+endif
+if not find 'MineBook2'
+  setvar 'MineBook2'
+  if not inlist 'MineBook' 'MineBook2'
+    pushlist 'MineBook' 'MineBook2'
+  endif
+endif
+if not find 'Homebook'
+  setvar 'Homebook'
+endif
+//###
+//### START ###
+//###
+if timer 'running' > 30000
+  sysmsg 'Running Auto Recall Miner (ARM)' 60
+  settimer 'running' 0
+endif
+//if mount == bettle then activate move ore to beetle
+if not find 'beetle' or not find 'pack_horse'
+  if mounted 'self'
+    useobject 'self'
+    pause 600
+  endif
+  if findtype 791 'ground' 0 1 2 as 'found'
+    setvar 'beetle' 'found'
+    @clearlist 'beetle'
+    pushlist 'beetle' 'yes'
+    elseif findtype 291 'ground' 0 1 2 as 'found'
+    setvar 'pack_horse' 'found'
+    @clearlist 'pack_horse'
+    pushlist 'pack_horse' 'yes'
+    elseif findtype 243 'ground' 0 1 2 as 'found'
+    setvar 'hiru' 'found'
+    if findtype 4980 'backpack' 0 1 1 as 'found'
+      useobject 'found'
+      waitfortarget 1000
+      target! 'hiru'
+    endif
+  else
+    @clearlist 'beetle'
+    pushlist 'beetle' 'no'
+    @clearlist 'pack_horse'
+    pushlist 'pack_horse' 'no'
+  endif
+endif
+//check for protection spell buff
+if not findbuff 'protection'
+  sysmsg 'ARM - Usando a magia de protecao anti-fuga' 60
+  cast 'protection' 'self'
+  pause 3000
+endif
+//check for mining tools
+//if counttype (name or graphic) [src] [hue] [range]
+//findtype (name) OR (graphic) [source] [hue] [quantity] [range]
+//if find (serial) [src] [hue] [qty] [range]
+if not findtype 3897 'backpack' 'any' and not findtype 3718 'backpack' 'any'
+  if find 0x47dfdae6
+    useobject 0x47dfdae6
+    waitforgump 111922706 15000
+  endif
+  if gumpexists 111922706
+    gumpresponse 10
+    waitforgump 111922706
+  endif
+  if not find 'resource_miner' 'ground' 'any' 1 2 or insysmsg 'have any of that'
+    sysmsg 'ARM - Vamos para casa' 60
+    pause 600
+    useobject 'Homebook'
+    waitforgump 1431013363
+    gumpresponse HomeRune[0]
+    sysmsg 'ARM - Aguardando recall' 60
+    pause 1000
+    while insysmsg 'needs time to' 'system'
+      clearsysmsg 
+      useobject 'Homebook'
+      waitforgump 1431013363
+      gumpresponse HomeRune[0]
+      pause 1000
+    endwhile
+    pause 2000
+  endif
+  if find 'resource_miner' 'ground' 'any' 1 2
+    useobject 'resource_miner'
+    sysmsg 'ARM - Abrindo a caixa de depositos' 60
+    pause 600
+  else
+    replay
+  endif
+  if findtype 3897 'resource_miner' 'any' 1 as 'found'
+    sysmsg 'ARM - Pegando uma pa' 60
+    pause 600
+    lift 'found'
+    wait 1000
+    drop 'backpack'
+    //movetype 0xf39 'resource_miner' 'backpack'
+    pause 1000
+  elseif findtype 3718 'resource_miner' 'any' 1 as 'found'
+    sysmsg 'ARM - Pegando uma picareta' 60
+    pause 600
+    lift 'found'
+    wait 1000
+    drop 'backpack'
+    //movetype 0xe86 'resource_miner' 'backpack' 0 0 0
+    pause 1000
+  elseif skill 'Tinkering' > 40 and inlist 'craft_tools' 'yes'
+    if not findtype 7154 'backpack' 0 100
+      sysmsg 'ARM - Pegando lingotes' 60
+      pause 600
+      lifttype 7154 100 'resource_miner'
+      wait 1000
+      drop 'backpack'
+      //movetype 7154 'resource_miner' 'backpack' 0 0 0 0 100
+      pause 1000
+    endif
+    //tinker tools
+    if not findtype 7864 'backpack' 0 1
+      sysmsg 'ARM - Pegando ferramenta de tinker' 60
+      pause 600
+      lifttype 7864 1 'resource_miner'
+      wait 1000
+      drop 'backpack'
+      //movetype 7864 'resource_miner' 'backpack' (x y z) 0 1
+      pause 1000
+    endif
+    while findtype 7864 'resource_miner' 'any' < 5 and findtype 7154 'backpack' 0 > 2
+      sysmsg 'ARM - Fabricando ferramenta de tinker (estoque baixo)' 60
+      usetype 7864 backpack
+      waitforgump 949095101
+      gumpresponse 23
+      pause 1200
+      if findtype 7864 'backpack' 'any' > 1
+        lifttype 7864 backpack
+        wait 1000
+        drop 'resource_miner'
+      //lifttype name gfc amt src hue
+      //movetype 7864 'backpack' 'resource_miner' (x y z) 0 1
+        pause 600
+      endif
+    endwhile
+    while findtype 3897 'resource_miner' 'any' < 10 and findtype 7154 'backpack' 0 > 4
+      sysmsg 'ARM - Fabricando pas (estoque baixo)' 60
+      usetype 7864 backpack
+      waitforgump 949095101
+      gumpresponse 8
+      waitforgump 949095101
+      gumpresponse 72
+      pause 1200
+      if findtype 3897 'backpack' 'any' > 1
+        lifttype 3897 backpack
+        wait 1000
+        drop 'resource_miner'
+      //movetype 3897 'backpack' 'resource_miner' 0 0 0 'any' 1
+        pause 600
+      endif
+    endwhile
+    //end tinkering
+    gumpresponse 0
+    while findtype 7864 'backpack' 0
+      sysmsg 'ARM - Devolvendo as ferramentas para o deposito' 60
+      pause 600
+      lifttype 7864 'backpack'
+      wait 1000
+      drop 'resource_miner'
+      //movetype 0x1eb8 'backpack' 'resource_miner' (x y z) 0 1
+      pause 1000
+    endwhile
+    while findtype 7154 'backpack' 0
+      sysmsg 'ARM - Devolvendo os lingotes para o deposito' 60
+      pause 600
+      lifttype 7154 'backpack'
+      wait 1000
+      drop 'resource_miner'
+      //movetype 7154 'backpack' 'resource_miner'
+      pause 1000
+    endwhile
+  else
+      overhead 'Nao encontrei ferramenta e nao consigo fabricar!'
+  // if timer 'sound' > 30000 and inlist 'sound' 'yes'
+  //   playsound 'over-here-2.wav'
+  //  settimer 'sound' 0
+  // endif
+    stop
+  endif
+endif
+//end tool check
+//if near stock, unload
+if find 'resource_miner' 'ground' 'any' 1 2
+  //stock stones
+  foreach stone in 'Stones'
+    while findtype stone backpack any as stone_found
+    //while find Stones[] 'backpack' 'resource_miner' (x y z) 'any'
+      sysmsg 'ARM - Guardando pedras no deposito' 60
+      lift stone_found
+      wait 1000
+      drop 'resource_miner'
+      pause 800
+    endwhile
+  endfor
+  //smelt backpack ores
+  foreach ore in 'Ores'
+    while findtype ore 'backpack' 'any' as ore_found
+      target cancel
+      sysmsg 'ARM - Derretendo os minerios' 60
+      useobject ore_found
+      wait 1000
+      // Small forge 0xfb1
+      // Elven forge 0x2dd8
+      // Large forge 0x19a2
+      //targetground 0xfb1 'any' 2
+      pause 600
+      if insysmsg 'not enough metal'
+        clearsysmsg 
+        sysmsg 'ARM - Movendo restos' 60
+        lift ore_found
+        wait 1000
+        drop 'resource_miner'
+        //moveitem 'found' 'resource_miner'
+        pause 800
+      endif
+    endwhile
+  endfor
+  if inlist 'pack_horse' 'yes' or inlist 'beetle' 'yes'
+    sysmsg 'ARM - Verificando mochila do pet' 60
+    if mounted 'self'
+      useobject 'self'
+      pause 600
+    elseif find 'beetle'
+        menu 'beetle' 11
+      //waitforcontext 'beetle' 10 5000
+        pause 600
+    elseif find 'pack_horse'
+        menu 'pack_horse' 11
+          //waitforcontext 'pack_horse' 12 5000
+        pause 600
+    endif
+    foreach ore in 'Ores'
+    while findtype ore 'beetle' 'any'
+        useobject 'found'
+        //waitfortarget 1000
+        // Small forge 0xfb1
+        // Elven forge 0x2dd8
+        // Large forge 0x19a2
+        //targetground 0xfb1 'any' 2
+        pause 600
+        if insysmsg 'not enough metal'
+            lift 'found'
+            wait 1000
+            drop 'resource_miner'
+            //moveitem 'found' 'resource_miner'
+          pause 800
+          clearsysmsg 
+        endif
+      endwhile
+    endfor
+    foreach ore in 'Ores'
+    while findtype ore 'pack_horse' 'any'
+        useobject 'found'
+    //waitfortarget 1000
+        // Small forge 0xfb1
+        // Elven forge 0x2dd8
+        // Large forge 0x19a2
+        //  targetground 0xfb1 'any' 2
+        pause 600
+        if insysmsg 'not enough metal'
+            lift 'found'
+            wait 1000
+            drop 'resource_miner'
+            //          moveitem 'found' 'resource_miner'
+          pause 800
+          clearsysmsg
+        endif
+      endwhile
+    endfor
+  endif
+  while findtype 7154 'backpack' 'any' as found
+      lift 'found'
+  wait 1000
+  drop 'resource_miner'
+  //moveitem 'found' 'resource_miner'
+    pause 1000
+  endwhile
+  //unload
+  //organizer 'Organizer-3'
+  //while organizing
+  //sysmsg 'ARM - Stocking ore' 40
+  //pause 1000
+  //endwhile
+  //go back to where you were
+  //useobject MineBook[]
+  //waitforgump 0x554b87f3 5000
+  //replygump 0x554b87f3 Runes[]
+  //pause 2000
+  //sysmsg 'Pause8' 33
+  //unmount if needed
+  //if mounted 'self'
+  // useobject 'self'
+  //sysmsg 'ARM - Unmounting' 37
+  //pause 600
+  //endif
+else
+  sysmsg 'ARM - Vamos tentar voltar pra casa novamente' 60
+  useobject 'Homebook'
+  waitforgump 1431013363 1000
+  gumpresponse HomeRune[0]
+  sysmsg 'ARM - Aguardando recall' 60
+  pause 1000
+  while insysmsg 'needs time to'
+    clearsysmsg 
+    useobject 'Homebook'
+    waitforgump 1431013363 1000
+    gumpresponse HomeRune[0]
+    pause 1000
+  endwhile
+  pause 2000
+  if insysmsg 'too encumbered to move'
+    sysmsg 'ARM - Estou muito pesado, vou jogar um pouco de minerio no chao' 60
+    lifttype 6585 5 backpack any
+    wait 1000
+    drop 'ground'
+    //movetypeoffset 6585 'backpack' 'ground' (0 -1 z) 0 5 2
+    pause 600
+    replay
+  endif
+  //sysmsg 'ARM - Aguardando meu retorno' 60
+  //pause 1200
+  replay
+endif
+//end unload
+//start mining loop
+//pause 1000
+foreach rune in 'Runes'
+  clearsysmsg 
+  target cancel
+  //sysmsg 'ARM - Iniciando os trabalhos' 60
+  pause 500
+  //wait for mana before recall
+  while mana < 9
+    sysmsg 'ARM - Fiquei sem mana, vou aguardar' 60
+    pause 1000
+  endwhile
+  useobject MineBook[0]
+  waitforgump 1431013363
+  gumpresponse Runes[0]
+  sysmsg 'ARM - Estou indo para a runa:' 60
+  sysmsg Runes[0] 33
+  sysmsg 'ARM - Estou usando o livro:' 60
+  sysmsg MineBook[0] 33
+  pause 1000
+  while insysmsg 'needs time to'
+    clearsysmsg 
+    useobject MineBook[0]
+    waitforgump 1431013363
+    gumpresponse Runes[0]
+    pause 1000
+  endwhile
+  pause 2000
+  //unmount if needed
+  if mounted 'self'
+    sysmsg 'ARM - Desmontando para minerar' 60
+    useobject 'self'
+    pause 600
+  endif
+  if not findtype 6585 'ground' 0 1 1 and inlist 'mark_local' 'yes'
+    //pause 600
+    lifttype 6585 1 backpack 0
+    wait 1000
+    drop ground
+    //movetypeoffset 6585 'backpack' 'ground' (0 1 z) 0 1 2
+    pause 600
+  endif
+  while not insysmsg 'there is no metal'
+    //@clearjournal
+    if insysmsg 'going down shortly' 'system'
+      clearsysmsg 
+      if diffweight < 50
+        sysmsg 'ARM - Estou muito pesado, vou jogar um pouco de minerio no chao' 60
+        lifttype 6585 5 backpack 0
+        wait 1000
+        drop ground
+        //movetypeoffset 0x19b9 'backpack' 'ground' (0 -1 z) 0 5 2
+        pause 600
+      endif
+      sysmsg 'ARM - O servidor vai reiniciar, voltando para casa' 60
+      pause 600
+      useobject 'Homebook'
+      waitforgump 1431013363
+      gumpresponse HomeRune[0]
+      pause 1000
+      while insysmsg 'needs time to'
+        clearsysmsg
+        useobject 'Homebook'
+        waitforgump 1431013363
+        gumpresponse HomeRune[0]
+        pause 1000
+      endwhile
+      pause 2000
+      //messagebox 'Information' 'Its PVP Time'
+      if timer 'sound' > 30000 and inlist 'sound' 'yes'
+          //playsound 'over-here-2.wav'
+        settimer 'sound' 0
+      endif
+      stop
+    endif
+    if insysmsg 'world is saving'
+      clearsysmsg
+      while not insysmsg 'World save complete'
+        sysmsg 'ARM - Aguardando o mundo salvar'
+        pause 1000
+      endwhile
+      clearsysmsg
+    endif
+    //heal
+    if diffhits > 30 
+        //and @getenemy 'criminal' 'enemy' 'murderer' 'gray'
+      if timer 'sound' > 30000 and @inlist 'sound' 'yes'
+          //playsound 'over-here-2.wav'
+        settimer 'sound' 0
+      endif
+      if diffweight < 50
+        sysmsg 'ARM - Estou muito pesado, vou jogar um pouco de minerio no chao' 60
+        lifttype 6585 5 backpack 0
+        wait 1000
+        drop ground
+      //movetypeoffset 0x19b9 'backpack' 'ground' (0 -1 z) 0 5 2
+        pause 600
+      endif
+      sysmsg 'ARM - Fui atingido, voltando para casa' 60
+      pause 600
+      useobject 'Homebook'
+      waitforgump 1431013363
+      gumpresponse HomeRune[0]
+      pause 1000
+      while insysmsg 'needs time to'
+        clearsysmsg 
+        useobject 'Homebook'
+        waitforgump 1431013363
+        gumpresponse HomeRune[0]
+        pause 1000
+      endwhile
+      pause 2000
+      msg 'guards'
+      cast "greater heal"
+      waitfortarget 5000
+      target "self"
+      pause 600
+      poplist 'Runes' 'front'
+    endif
+    //if @getenemy 'criminal' 'enemy' 'murderer'
+    //pause 2000
+    //cast 'blade spirits'
+    //waitfortarget 10000
+    //autotargettileoffset 0 -1 //nw
+    //endif
+    if findtype 6585 'backpack' 'any' > 10 and find 'beetle' 
+        lifttype 6585 10 backpack any
+        wait 1000
+        drop 'beetle'
+        //movetype 6585 'backpack' 'beetle'
+      pause 600
+    endif
+    if findtype 6585 'backpack' 'any' > 10 and find 'pack_horse'
+        lifttype 6585 10 backpack any
+        wait 1000
+        drop 'pack_horse'
+        //movetype 6585 'backpack' 'pack_horse'
+      pause 600
+    endif
+    if diffweight < 50 or findtype 6585 'beetle' 'any' > 100
+      //recall home
+      sysmsg 'ARM - Estou quase cheio, voltando para casa' 60
+      pause 600
+      useobject 'Homebook'
+      waitforgump 1431013363
+      gumpresponse HomeRune[0]
+      pause 1000
+      while insysmsg 'needs time to'
+        clearsysmsg 
+        useobject 'Homebook'
+        waitforgump 1431013363
+        gumpresponse HomeRune[0]
+        pause 1000
+      endwhile
+      pause 2000
+      if insysmsg 'too encumbered to move'
+        lifttype 6585 5 backpack 0
+        wait 1000
+        drop ground
+        //movetypeoffset 6585 'backpack' 'ground' (0 -1 z) 0 5 2
+        pause 600
+      endif
+      //sysmsg 'ARM - Aguardando a volta para casa' 60
+      //pause 2000
+      replay
+    endif
+    if not findlayer self righthand
+        if findtype 3718 backpack any as "pick"
+            setvar 'mining_tool' 'found'
+            dclick "pick"
+        else
+        
+        //if findtype 3718 'backpack' 'any' as 'found'
+        //setvar 'mining_tool' 'found'
+        //target cancel
+        //if useobject 'mining_tool'
+          //waitfortarget 1000
+      //targettileoffset 0 1 //nw
+      else
+        replay
+        //stop
+      endif
+    else
+      replay
+    endif
+    //smelt backpack ores
+    if inlist 'smelt_on_the_run' 'yes'
+        foreach ore in 'Ores'
+    while findtype ore 'backpack' 'any' as ore_found
+        target cancel
+          sysmsg 'ARM - Derretendo os minerios' 60
+          useobject ore_found
+          //waitfortarget 1000
+          //targettype! 0xfb1
+          pause 600
+          if insysmsg 'not enough metal'
+            break
+          endif
+        endwhile
+      endfor
+    endif
+    if gumpexists 0x968740
+      walk 'south'
+      while gumpexists 0x968740
+        if timer 'sound' > 30000 and inlist 'sound' 'yes'
+          //playsound 'over-here-2.wav'
+          guild 'alguem ai?'
+          settimer 'sound' 0
+        endif
+        pause 1000
+      endwhile
+      //@canceltarget
+      //@poplist 'Runes' 'front'
+    endif
+    if insysmsg 'worn out your tool'
+      clearsysmsg 
+      replay
+    endif
+    if insysmsg 'cannot be seen' 'system'
+      clearsysmsg
+      walk 'south'
+    endif
+    if insysmsg 'mine there' 'system'
+      clearsysmsg
+      replay
+    endif
+    pause 1200
+  endwhile
+  poplist 'Runes' 'front'
+  //if list 'Runes' == 0
+  //  replay
+  //endif
+  //end while loop
+endfor

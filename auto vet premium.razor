@@ -1,10 +1,197 @@
+###
+# Script: Tamer Companion Premium
+# Author: Phelus
+# Description: Your tamer companion for all times.
+# Date: 23/08/2021
+# Version: 2.0
+# Changes: some changes to make it portable for other to use without problem.
+###
+# IMPORTANT: you can change some lines to your choices, for example:
+# Line X - 'spell_hide' 'no' // change to yes if you are stationary and would like
+# // to hide if nothing to do.
+# Line X - 'auto_atk_type' 'no' // change to yes if you would like this script to
+# // set a target and call another script to auto debuff/herd/atk than come back
+# Line X - 'buff_peace' 'no' // change to yes if you would like to auto buff using
+# // any of the barding skills like peace, disco or provok
+# Line X - 'buff_eat_food' 'no' // change to yes if you would like to eat some food
+# // to get the food buff
+# Line X - 'auto_create_food' 'no' // change to yes if you would like to auto create
+# // food using magery spell, this will only happen in a safe situation, but be aware.
+### lists ###
 if not listexists 'buff_taste_id'
     createlist 'buff_taste_id'
-    pushlist 'buff_taste_id' 'yes'
 endif
+if list 'buff_taste_id' >= 0
+    clearlist 'buff_taste_id'
+    if skill "taste id" >= 50
+        pushlist 'buff_taste_id' 'yes'
+    else
+        pushlist 'buff_taste_id' 'no'
+    endif
+endif
+if not listexists 'spell_hide'
+    createlist 'spell_hide'
+endif
+if list 'spell_hide' >= 0
+    clearlist 'spell_hide'
+    pushlist 'spell_hide' 'no'
+endif
+if not listexists 'auto_atk_type'
+    createlist 'auto_atk_type'
+endif
+if list 'auto_atk_type' >= 0
+    clearlist 'auto_atk_type'
+    pushlist 'auto_atk_type' 'no'
+endif
+if not listexists 'buff_peace'
+    createlist 'buff_peace'
+endif
+if list 'buff_peace' >= 0
+    clearlist 'buff_peace'
+    if skill "peacemaking" >= 50
+        pushlist 'buff_peace' 'yes'
+    else
+        pushlist 'buff_peace' 'no'
+    endif
+endif
+if not listexists 'buff_disco'
+    createlist 'buff_disco'
+endif
+if list 'buff_disco' >= 0
+    clearlist 'buff_disco'
+    if skill "discordance" >= 50
+        pushlist 'buff_disco' 'yes'
+    else
+        pushlist 'buff_disco' 'no'
+    endif
+endif
+if not listexists 'buff_provoke'
+    createlist 'buff_provoke'
+endif
+if list 'buff_provoke' >= 0
+    clearlist 'buff_provoke'
+    if skill "provocation" >= 50
+        pushlist 'buff_provoke' 'yes'
+    else
+        pushlist 'buff_provoke' 'no'
+    endif
+endif
+if not listexists 'buff_eat_food'
+    createlist 'buff_eat_food'
+endif
+if list 'buff_eat_food' >= 0
+    clearlist 'buff_eat_food'
+    pushlist 'buff_eat_food' 'yes'
+endif
+if not listexists 'auto_create_food'
+    createlist 'auto_create_food'
+endif
+if list 'auto_create_food' >= 0
+    clearlist 'auto_create_food'
+    pushlist 'auto_create_food' 'yes'
+endif
+if not listexists 'body_type'
+    createlist 'body_type'
+endif
+if list 'body_type' >= 0
+    clearlist 'body_type'
+    pushlist 'body_type' 43
+    pushlist 'body_type' 86
+    pushlist 'body_type' 9
+    pushlist 'body_type' 2903
+    pushlist 'body_type' 160
+endif
+if not listexists 'monster_hue'
+    createlist 'monster_hue'
+endif
+if list 'monster_hue' >= 0
+    clearlist 'monster_hue'
+    pushlist 'monster_hue' 2903
+    pushlist 'monster_hue' 2835
+endif
+if not listexists 'food_type'
+    createlist 'food_type'
+endif
+if list 'food_type' >= 0
+    clearlist 'food_type'
+    pushlist 'food_type' 29773
+    pushlist 'food_type' 28888
+    pushlist 'food_type' 27774
+    pushlist 'food_type' 28879
+    pushlist 'food_type' 28880
+    pushlist 'food_type' 29774
+endif
+if not listexists 'InstrumentTypes'
+    createlist 'InstrumentTypes'
+endif
+if list 'InstrumentTypes' >= 0
+    clearlist 'InstrumentTypes'
+    //harpinha
+    pushlist 'InstrumentTypes' 3762
+    //tamburin
+    pushlist 'InstrumentTypes' 3742
+    //lute
+    pushlist 'InstrumentTypes' 3763
+    //flute
+    pushlist 'InstrumentTypes' 10245
+    //drum
+    pushlist 'InstrumentTypes' 3740
+endif
+if not listexists "reg_type"
+    createlist "reg_type"
+endif
+if list 'reg_type' = 0
+    //GS 600
+    pushlist "reg_type" 3973
+    //GA 600
+    pushlist "reg_type" 3972
+    //MR 600
+    pushlist "reg_type" 3974
+    //BM 600
+    pushlist "reg_type" 3963
+    //SS
+    pushlist "reg_type" 3981
+    //NS
+    pushlist "reg_type" 3976
+    //SA 3980
+    pushlist "reg_type" 3980
+    //BP
+    pushlist "reg_type" 3962
+endif
+if not listexists 'first_run'
+  createlist 'first_run'
+endif
+if list 'first_run' = 0
+    pushlist 'first_run' 'yes'
+    clearsysmsg 
+endif
+if not listexists 'skill_used'
+  createlist 'skill_used'
+endif
+if not listexists 'debuff_used'
+  createlist 'debuff_used'
+endif
+if not listexists 'need_food'
+  createlist 'need_food'
+endif
+if not listexists 'need_instrument'
+  createlist 'need_instrument'
+endif
+if not listexists 'need_reg'
+  createlist 'need_reg'
+endif
+### timers ###
 if not timerexists 'vet'
     createtimer 'vet'
     settimer 'vet' 8501
+endif
+if not timerexists 'checks'
+    createtimer 'checks'
+    settimer 'checks' 30001
+endif
+if not timerexists 'buff_peace'
+    createtimer 'buff_peace'
+    settimer 'buff_peace' 8501
 endif
 if not timerexists 'running'
     createtimer 'running'
@@ -26,45 +213,217 @@ if not timerexists 'cure_pot'
     createtimer 'cure_pot'
     settimer 'cure_pot' 10001
 endif
+if not timerexists 'pot_refresh'
+    createtimer 'pot_refresh'
+    settimer 'pot_refresh' 10001
+endif
+if not timerexists 'pot_str'
+    createtimer 'pot_str'
+    settimer 'pot_str' 1001
+endif
 if not timerexists 'tba'
     createtimer 'tba'
-    settimer 'tba' 600
+    settimer 'tba' 601
 endif
 if not timerexists 'use_skill'
     createtimer 'use_skill'
-    settimer 'use_skill' 600
+    settimer 'use_skill' 601
 endif
-if hits < 75
-    if skill 'Healing' > 30 and timer 'bands' >= 11000 and findtype 3617 backpack and timer 'tba' >= 600
-        usetype 3617
-        waitfortarget 5000
-        target 'self'
-        settimer 'bands' 0
+if not timerexists 'mushroom'
+    createtimer 'mushroom'
+    settimer 'mushroom' 8501
+endif
+if not timerexists 'debuff'
+    createtimer 'debuff'
+    settimer 'debuff' 60001
+endif
+if not timerexists 'pouch'
+    createtimer 'pouch'
+    settimer 'pouch' 1001
+endif
+### Running information ###
+if timer 'running' >= 30000
+    sysmsg 'Running Tamer Companion Premium (TCP)' 60
+    settimer 'running' 0
+endif
+### main ###
+if not dead
+    if hits < 75
+        if skill 'Healing' > 30 and timer 'bands' >= 11000 and findtype 3617 backpack and timer 'tba' >= 600
+            usetype 3617
+            waitfortarget 5000
+            if targetexists beneficial
+                target 'self'
+                settimer 'bands' 0
+                settimer 'tba' 0
+            else
+                target cancel
+                replay
+            endif
+        elseif skill 'Magery' >= 30 and timer 'cast_recovery' >= 200 and mana >= 14 and count 'garlic' > 0 and count 'ginseng' > 0 and count 'mandrake root' > 0 and count 'spiders silk' > 0 and timer 'tba' >= 600
+            target cancel
+            cast 'greater heal'
+            waitfortarget 5000
+            if targetexists beneficial
+                target 'self'
+                settimer 'cast_recovery' 0
+                settimer 'tba' 0
+            else
+                replay
+            endif
+        elseif findtype "Yellow Potion" backpack and timer 'heal_pot' >= 11000 and timer 'tba' >= 600
+            potion 'heal'
+            settimer 'heal_pot' 0
+            settimer 'tba' 0
+        endif
+    endif
+    if poisoned 
+        if findtype "Orange Potion" backpack and timer 'cure_pot' >= 1000 and timer 'tba' >= 600
+            potion 'cure'
+            settimer 'cure_pot' 0
+            settimer 'tba' 0
+        elseif skill 'Healing' > 30 and timer 'bands' >= 11000 and findtype 3617 backpack and timer 'tba' >= 600
+            usetype 3617
+            waitfortarget 5000
+            if targetexists beneficial
+                target 'self'
+                settimer 'bands' 0
+                settimer 'tba' 0
+            else
+                target cancel
+                replay
+            endif
+        elseif skill 'Magery' >= 30 and timer 'cast_recovery' >= 200 and mana >= 6 and count 'garlic' > 0 and count 'ginseng' > 0 and timer 'tba' >= 600
+            target cancel
+            cast 'cure'
+            waitfortarget 5000
+            if targetexists beneficial
+                target 'self'
+                settimer 'cast_recovery' 0
+                settimer 'tba' 0
+            elseif poisoned
+                replay
+            endif
+        endif
+    endif
+    if paralyzed and findtype 3705 backpack 38 1 and timer "pouch" >= 1000 and "tba" >= 600
+        say [pouch
+        settimer "pouch" 0
+        settimer "tba" 0
+    endif
+    if stam <= 5 and timer "pot_refresh" >= 4700 and findtype "Red Potion" backpack
+        potion "refresh"
+        settimer "pot_refresh" 0
         settimer 'tba' 0
-    elseif skill 'Magery' > 30 and timer 'cast_recovery' >= 2000 and mana >= 14 and count 'garlic' > 0 and count 'ginseng' > 0 and count 'mandrake root' > 0 and count 'spiders silk' > 0 and timer 'tba' >= 600
+    endif
+    if stam < 2 and timer "pot_str" >= 1000 and str <= 100 and findtype "White Potion" backpack
+        potion "str"
+        settimer "pot_str" 0
+        settimer 'tba' 0
+    endif
+    if weight >= maxweight and timer "pot_str" >= 1000 and str <= 111 and findtype "White Potion" backpack
+        potion "str"
+        settimer "pot_str" 0
+        settimer 'tba' 0
+    endif
+    if not findbuff 'herbal poutice' and inlist 'buff_taste_id' 'yes' and hits >= 90 and not hidden and not findbuff 'actively meditating' and timer 'tba' >= 600
         target cancel
-        cast 'greater heal'
+        skill "taste id"
         waitfortarget 5000
-        target 'self'
-        settimer 'cast_recovery' 0
-        settimer 'tba' 0
-    elseif count 'heal potions' and timer 'heal_pot' >= 11000 and timer 'tba' >= 600
-        potion 'heal'
-        settimer 'heal_pot' 0
-        settimer 'tba' 0
+        targetrelloc 0 0
+        settimer "tba" 0 
+        settimer "use_skill" 0 
+    endif
+    if not findbuff 'food satisfaction' and inlist 'buff_eat_food' 'yes' and hits >= 90 and not hidden and not findbuff 'actively meditating' and timer 'tba' >= 600
+        foreach food in food_type
+            if findtype food backpack as found
+                //usetype found
+                dclick found
+                settimer "tba" 0 
+                //clearsysmsg 
+                //waitfortarget 5000
+                break
+            endif
+        endfor
+    endif
+    if timer "buff_peace" >= 900000 and inlist 'buff_peace' 'yes' and hits >= 90 and not hidden and not findbuff 'actively meditating' and timer 'tba' >= 600 and timer "use_skill" >= 11000
+        target cancel
+        skill 'peacemaking'
+        waitfortarget 5000
+        if insysmsg "instrument shall you play"
+            if targetexists neutral
+                foreach instrument in InstrumentTypes
+                    if findtype instrument backpack as found
+                        target found
+                        clearsysmsg 
+                        waitfortarget 5000
+                        break
+                    endif
+                endfor
+            endif
+        endif
+        targetrelloc 0 0
+        settimer "tba" 0 
+        settimer "use_skill" 0 
+        settimer "buff_peace" 0 
+    endif
+    if not hidden and inlist 'spell_hide' 'yes' and hits >= 90 and not findbuff 'actively meditating' and timer 'tba' >= 600 and timer 'cast_recovery' >= 200 and mana >= 20 and count "nightshade" > 0 and count "blood moss" > 0
+        target cancel
+        cast "invisibility"
+        waitfortarget 5000
+        if targetexists beneficial
+            target 'self'
+            settimer "tba" 0
+            settimer "cast_recovery" 0
+        else
+            replay
+        endif
+    endif
+    if inlist "auto_atk_type" "yes"
+        foreach body in body_type
+            foreach mhue in monster_hue
+                if findtype body ground mhue 1 12 as found 
+                    //overhead found
+                    if noto found != friend
+                        //overhead 'achei'
+                        sysmsg body
+                        @setvar atk found
+                        script 'combo'
+                        break
+                    endif
+                endif
+            endfor
+        endfor
+    endif
+    if insysmsg "consume a magic mushroom"
+        clearsysmsg
+        settimer mushroom 0
+    endif
+    if mana < 40 and timer mushroom >= 65000 and timer tba >= 600 and findtype 29012 backpack
+        usetype 29012
+        overhead "NHOM MUSH"
+        settimer mushroom 0
+    endif
+    if counttype 29012 backpack < 5 and hits >= 90 and not hidden and not findbuff 'actively meditating' and mana >= 90 and timer 'tba' >= 600 and timer 'cast_recovery' >= 200 and mana >= 20 and count "mandrake root" > 0 and count "ginseng" > 0 and count "garlic" > 0
+        while counttype 29012 backpack < 10
+            cast "create food"
+            pause 500
+        endwhile
     endif
 endif
 
-if poisoned and count 'cure potions' and timer 'cure_pot' >= 11000 and timer 'tba' >= 600
-    potion 'cure'
-    settimer 'cure_pot' 0
-    settimer 'tba' 0
+if timer "use_skill" >= 11000 and inlist "skill_used" "yes"
+    sysmsg "use_skill"
+    sysmsg "[USE SKILL]"
+    settimer "use_skill" 0
+    poplist "skill_used" "yes"
 endif
 
-if not findbuff 'herbal poutice' and inlist 'buff_taste_id' 'yes' and hits >= 90 and not hidden and not findbuff 'actively meditating' and timer 'tba' >= 600
-    skill "teste id"
-    settimer "tba" 0 
-    settimer "use_skill" 0 
+if timer "debuff" >= 60000 and inlist "debuff_used" "yes"
+    sysmsg "debuff"
+    sysmsg "[DEBUFF AGAIN]"
+    settimer "debuff" 0
+    poplist "debuff_used" "yes"
 endif
 
 //if not setvar 'pet_tank' true
@@ -123,19 +482,63 @@ endif
 //    settimer 'vet' 0
     //endif
     //endif
-if timer 'running' >= 30000
-    sysmsg 'Running Auto Vet Premium (AVP)'
-    if count 'bandages' < 30
-        sysmsg 'Poucas bands < 30'
-    endif
-    if weight >= 350
-        sysmsg 'Peso > 350'
-    endif
-    settimer 'running' 0
-endif
-while dead 'self'
 
-endwhile
+// ### WS Check ###
+if insysmsg "The world is saving, please wait."
+    while not insysmsg "save complete"
+        pause 100
+    endwhile
+    clearsysmsg  
+endif
+
+if timer 'checks' >= 30000
+    if diffweight < 20
+        sysmsg 'Near max weight'
+    endif
+    clearlist "need_food"
+    foreach food in food_type
+        if findtype food backpack
+            pushlist "need_food" "no"
+        endif
+    endfor
+    if not inlist "need_food" "no" and not findbuff 'food satisfaction'
+        sysmsg 'Missing food'
+    endif
+    if not findtype 3713 backpack
+        sysmsg 'Missing herding tool'
+    endif
+    if not findtype 3705 backpack 38
+        sysmsg 'Missing pouch'
+    endif
+    if skill "peacemaking" >= 50 or skill "discordance" >= 50 or skill "provocation" >= 50
+        clearlist "need_instrument"
+        foreach instrument in InstrumentTypes
+            if findtype instrument backpack any
+                pushlist "need_instrument" "no"
+            endif
+        endfor
+        if not inlist "need_instrument" "no"
+            sysmsg 'Missing instrument'
+        endif
+    endif
+    if skill "magery" >= 50
+        clearlist "need_reg"
+        foreach reg in reg_type
+            if counttype reg backpack < 10
+                sysmsg 'Regs count is lower than 10'
+                sysmsg reg
+            endif
+        endfor
+        if not findbuff "magic reflection"
+            sysmsg 'Missing reflection'
+        endif
+    endif
+    if not findtype 5370 backpack 2799
+        sysmsg 'Missing rope'
+    endif
+    
+    settimer 'checks' 0
+endif
 
 pause 100
 loop

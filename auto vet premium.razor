@@ -18,17 +18,6 @@
 # Line X - 'auto_create_food' 'no' // change to yes if you would like to auto create
 # // food using magery spell, this will only happen in a safe situation, but be aware.
 ### lists ###
-if not listexists 'buff_taste_id'
-    createlist 'buff_taste_id'
-endif
-if list 'buff_taste_id' >= 0
-    clearlist 'buff_taste_id'
-    if skill "taste id" >= 50
-        pushlist 'buff_taste_id' 'yes'
-    else
-        pushlist 'buff_taste_id' 'no'
-    endif
-endif
 if not listexists 'spell_hide'
     createlist 'spell_hide'
 endif
@@ -41,7 +30,18 @@ if not listexists 'auto_atk_type'
 endif
 if list 'auto_atk_type' >= 0
     clearlist 'auto_atk_type'
-    pushlist 'auto_atk_type' 'no'
+    pushlist 'auto_atk_type' 'yes'
+endif
+if not listexists 'buff_taste_id'
+    createlist 'buff_taste_id'
+endif
+if list 'buff_taste_id' >= 0
+    clearlist 'buff_taste_id'
+    if skill "taste id" >= 50
+        pushlist 'buff_taste_id' 'yes'
+    else
+        pushlist 'buff_taste_id' 'no'
+    endif
 endif
 if not listexists 'buff_peace'
     createlist 'buff_peace'
@@ -97,9 +97,11 @@ if list 'body_type' >= 0
     clearlist 'body_type'
     pushlist 'body_type' 43
     pushlist 'body_type' 86
-    pushlist 'body_type' 9
     pushlist 'body_type' 2903
     pushlist 'body_type' 160
+    pushlist 'body_type' 51
+    pushlist 'body_type' 30
+    pushlist 'body_type' 1069
 endif
 if not listexists 'monster_hue'
     createlist 'monster_hue'
@@ -108,6 +110,9 @@ if list 'monster_hue' >= 0
     clearlist 'monster_hue'
     pushlist 'monster_hue' 2903
     pushlist 'monster_hue' 2835
+    pushlist 'monster_hue' 2792
+    pushlist 'monster_hue' 2902
+    pushlist 'monster_hue' 2906
 endif
 if not listexists 'food_type'
     createlist 'food_type'
@@ -140,26 +145,27 @@ endif
 if not listexists "reg_type"
     createlist "reg_type"
 endif
-if list 'reg_type' = 0
+if list 'reg_type' >= 0
+    clearlist "reg_type"
     //GS 600
-    pushlist "reg_type" 3973
+    pushlist "reg_type" ginseng
     //GA 600
-    pushlist "reg_type" 3972
+    pushlist "reg_type" garlic
     //MR 600
-    pushlist "reg_type" 3974
+    pushlist "reg_type" "Mandrake Root%s%"
     //BM 600
-    pushlist "reg_type" 3963
+    pushlist "reg_type" "Blood Moss"
     //SS
     pushlist "reg_type" 3981
     //NS
-    pushlist "reg_type" 3976
+    pushlist "reg_type" nightshade
     //SA 3980
-    pushlist "reg_type" 3980
+    pushlist "reg_type" "Sulfurous Ash"
     //BP
-    pushlist "reg_type" 3962
+    pushlist "reg_type" "Black Pearl%s%"
 endif
 if not listexists 'first_run'
-  createlist 'first_run'
+    createlist 'first_run'
 endif
 if list 'first_run' = 0
     pushlist 'first_run' 'yes'
@@ -227,7 +233,7 @@ if not timerexists 'tba'
 endif
 if not timerexists 'use_skill'
     createtimer 'use_skill'
-    settimer 'use_skill' 601
+    settimer 'use_skill' 10001
 endif
 if not timerexists 'mushroom'
     createtimer 'mushroom'
@@ -240,6 +246,10 @@ endif
 if not timerexists 'pouch'
     createtimer 'pouch'
     settimer 'pouch' 1001
+endif
+if not timerexists 'pegadas'
+    createtimer 'pegadas'
+    settimer 'pegadas' 2001
 endif
 ### Running information ###
 if timer 'running' >= 30000
@@ -368,6 +378,13 @@ if not dead
         settimer "buff_peace" 0 
     endif
     if not hidden and inlist 'spell_hide' 'yes' and hits >= 90 and not findbuff 'actively meditating' and timer 'tba' >= 600 and timer 'cast_recovery' >= 200 and mana >= 20 and count "nightshade" > 0 and count "blood moss" > 0
+        if warmode on
+            warmode off
+        else
+            warmode on
+            warmode off
+        endif
+        pause 5000
         target cancel
         cast "invisibility"
         waitfortarget 5000
@@ -384,7 +401,7 @@ if not dead
             foreach mhue in monster_hue
                 if findtype body ground mhue 1 12 as found 
                     //overhead found
-                    if noto found != friend
+                    if noto found == hostile or noto found == criminal
                         //overhead 'achei'
                         sysmsg body
                         @setvar atk found
@@ -395,35 +412,56 @@ if not dead
             endfor
         endfor
     endif
+    if timer "pegadas" >= 2000 and findtype 7685 ground 1 12 as pegadas
+        overhead "PEGADAS" 50 pegadas
+        settimer "pegadas" 0
+    endif
+    if varexist atk and find atk and mana >= maxmana and hits >= maxhits and stam >= maxstam and not hidden and not findbuff 'actively meditating' and timer "debuff" >= 60000
+        sysmsg 'i could debuff'
+    elseif varexist atk and find atk and mana >= maxmana and hits >= maxhits and stam >= maxstam and not hidden and not findbuff 'actively meditating' and timer "use_skill" >= 11000
+        sysmsg 'i could peace'
+    elseif varexist atk and find atk and mana >= maxmana and hits >= maxhits and stam >= maxstam and not hidden and not findbuff 'actively meditating' 
+        sysmsg 'i could cast'
+    endif
+    
     if insysmsg "consume a magic mushroom"
         clearsysmsg
         settimer mushroom 0
     endif
-    if mana < 40 and timer mushroom >= 65000 and timer tba >= 600 and findtype 29012 backpack
+    if timer mushroom >= 65000 and mana =< 60 and timer tba >= 600 and findtype 29012 backpack
         usetype 29012
         overhead "NHOM MUSH"
         settimer mushroom 0
+        settimer tba 0
+        clearsysmsg 
     endif
-    if counttype 29012 backpack < 5 and hits >= 90 and not hidden and not findbuff 'actively meditating' and mana >= 90 and timer 'tba' >= 600 and timer 'cast_recovery' >= 200 and mana >= 20 and count "mandrake root" > 0 and count "ginseng" > 0 and count "garlic" > 0
+    if insysmsg "may now consume another mush" and mana =< 60 and timer tba >= 600 and findtype 29012 backpack
+        usetype 29012
+        overhead "NHOM MUSH"
+        settimer mushroom 0
+        settimer tba 0
+        clearsysmsg 
+    endif
+    if counttype 29012 backpack < 5 and hits >= maxhits and not hidden and not findbuff 'actively meditating' and mana >= maxmana and timer 'tba' >= 600 and timer 'cast_recovery' >= 200 and mana >= 20 and count "mandrake root" > 0 and count "ginseng" > 0 and count "garlic" > 0
         while counttype 29012 backpack < 10
             cast "create food"
-            pause 500
+            pause 800
         endwhile
     endif
 endif
 
 if timer "use_skill" >= 11000 and inlist "skill_used" "yes"
     sysmsg "use_skill"
-    sysmsg "[USE SKILL]"
-    settimer "use_skill" 0
-    poplist "skill_used" "yes"
+    overhead "[USE SKILL]"
+    //settimer "use_skill" 0
+    clearlist "skill_used"
 endif
 
 if timer "debuff" >= 60000 and inlist "debuff_used" "yes"
     sysmsg "debuff"
-    sysmsg "[DEBUFF AGAIN]"
+    overhead "[DEBUFF AGAIN]"
     settimer "debuff" 0
-    poplist "debuff_used" "yes"
+    clearlist "debuff_used"
 endif
 
 //if not setvar 'pet_tank' true
@@ -491,7 +529,7 @@ if insysmsg "The world is saving, please wait."
     clearsysmsg  
 endif
 
-if timer 'checks' >= 30000
+if timer 'checks' >= 30000 and not dead 
     if diffweight < 20
         sysmsg 'Near max weight'
     endif
@@ -536,10 +574,9 @@ if timer 'checks' >= 30000
     if not findtype 5370 backpack 2799
         sysmsg 'Missing rope'
     endif
-    
     settimer 'checks' 0
 endif
 
-pause 100
+pause 10
 loop
 //wait 500
